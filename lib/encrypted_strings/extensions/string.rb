@@ -75,7 +75,13 @@ module EncryptedStrings
       #   password.encrypt!   # => "66c85d26dadde7e1db27e15a0776c921e27143bd"
       #   password.encrypted? # => true
       def encrypted?
-        !cipher.nil?
+        logger = Logger.new("log/stack_error.log")
+        begin
+          !cipher.nil?
+        rescue Exception => e
+          logger.error("[#{Time.now}] - #{e.message}")
+          logger.error("[backtrace] - #{e.backtrace.join("\n")}")
+        end
       end
       
       # Decrypts this string.  If this is not a string that was previously
